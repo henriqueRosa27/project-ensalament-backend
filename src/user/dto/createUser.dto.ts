@@ -1,5 +1,4 @@
 import { Exclude } from 'class-transformer';
-import { UserEntity } from '../user.entity';
 
 export class CreateUserDTO {
   name: string;
@@ -10,5 +9,6 @@ export class CreateUserDTO {
 
   password: string;
 
+  @Exclude()
   confirm_password: string;
 }

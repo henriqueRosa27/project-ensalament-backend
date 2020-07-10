@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './user.entity';
-import { Repository } from 'typeorm';
+import { Repository, getRepository } from 'typeorm';
 import { plainToClass } from 'class-transformer';
 import { UserDTO } from './dto/user.dto';
 import { CreateUserDTO } from './dto/createUser.dto';
@@ -21,6 +21,16 @@ export class UserService {
     const entity = plainToClass(UserEntity, createDTO);
     const user = await this.rep.save(entity);
     delete user.password;
+    return plainToClass(UserDTO, user);
+  }
+
+  async getUserByEmail(email: string): Promise<UserDTO> {
+    const qb = await getRepository(UserEntity)
+      .createQueryBuilder('user')
+      .where('LOWER(user.email) = LOWER(:email)', { email });
+
+    const user = await qb.getOne();
+
     return plainToClass(UserDTO, user);
   }
 }
