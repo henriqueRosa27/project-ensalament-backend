@@ -1,48 +1,36 @@
 import * as Joi from '@hapi/joi';
-import { custom } from '@hapi/joi';
+import * as Yup from 'yup';
+import { UserService } from '../user.service';
+import { UserEntity } from '../user.entity';
+import { Repository } from 'typeorm';
 
-export const createUserValidation = Joi.object({
-  name: Joi.string()
+export const createUserValidation = Yup.object({
+  name: Yup.string()
     .required()
     .min(4)
-    .max(20)
-    .messages({
-      'any.required': 'Campo obrigatório',
-      'string.empty': 'Campo obrigatório',
-      'string.min': 'Mínimo de 4 caracteres',
-      'string.max': 'Máximo de 20 caracteres',
-    }),
-  surname: Joi.string()
+    .max(20),
+  surname: Yup.string()
     .required()
     .min(4)
-    .max(50)
-    .messages({
-      'any.required': 'Campo obrigatório',
-      'string.empty': 'Campo obrigatório',
-      'string.min': 'Mínimo de 4 caracteres',
-      'string.max': 'Máximo de 50 caracteres',
-    }),
-  email: Joi.string()
+    .max(50),
+  email: Yup.string()
     .required()
     .email()
     .max(100)
-    .messages({
-      'any.required': 'Campo obrigatório',
-      'string.empty': 'Campo obrigatório',
-      'string.min': 'Mínimo de 4 caracteres',
-      'string.email': 'Email inválido',
-      'string.max': 'Máximo de 100 caracteres',
+    .test('unique', 'E-mail já cadastrado', async value => {
+      if (value) {
+        const userService = new UserService(new Repository<UserEntity>());
+        const user = await userService.getUserByEmail(value);
+        return !user;
+      }
+      return true;
     }),
-  password: Joi.string()
+  password: Yup.string()
     .required()
     .min(8)
-    .max(16)
-    .messages({
-      'any.required': 'Campo obrigatório',
-      'string.empty': 'Campo obrigatório',
-      'string.min': 'Mínimo de 8 caracteres',
-      'string.max': 'Máximo de 16 caracteres',
-    }),
-  confirm_password: Joi.ref('password'),
-}).with('password', 'confirm_password');
-
+    .max(16),
+  confirm_password: Yup.string().oneOf(
+    [Yup.ref('password'), null],
+    'Senha diferentes',
+  ),
+});
