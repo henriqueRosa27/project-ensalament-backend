@@ -1,4 +1,3 @@
-import * as Joi from '@hapi/joi';
 import * as Yup from 'yup';
 import { UserService } from '../user.service';
 import { UserEntity } from '../user.entity';
