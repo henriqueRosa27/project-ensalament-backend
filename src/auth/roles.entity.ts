@@ -13,5 +13,5 @@ export class RoleEntity {
     type => UserEntity,
     user => user.role,
   )
-  user: UserEntity[];
+  users: UserEntity[];
 }

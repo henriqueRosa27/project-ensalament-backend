@@ -35,7 +35,7 @@ export class UserEntity {
 
   @ManyToOne(
     type => RoleEntity,
-    role => role.user,
+    role => role.users,
   )
   @JoinColumn({ name: 'role_id' })
   role: RoleEntity;
