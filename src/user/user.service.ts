@@ -13,10 +13,6 @@ export class UserService {
     @InjectRepository(UserEntity) private readonly rep: Repository<UserEntity>,
   ) {}
 
-  async get(): Promise<UserDTO[]> {
-    return await this.rep.find();
-  }
-
   async create(createDTO: CreateUserDTO): Promise<UserDTO> {
     delete createDTO.confirm_password;
     const entity = plainToClass(UserEntity, createDTO);
