@@ -1,3 +1,5 @@
+import { RoleDTO } from 'src/auth/dto/role.dto';
+
 export class UserDTO {
   id: number;
 
@@ -6,4 +8,6 @@ export class UserDTO {
   surname: string;
 
   email: string;
+
+  role: RoleDTO;
 }

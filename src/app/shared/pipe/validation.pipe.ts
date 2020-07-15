@@ -11,7 +11,6 @@ import { ObjectSchema } from 'yup';
 export class JoiValidationPipe implements PipeTransform {
   constructor(private schema: ObjectSchema) {}
 
-
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   async transform(value: any, metadata: ArgumentMetadata) {
     let isValid = true;

@@ -20,8 +20,8 @@ export class UserEntity {
   @Column({ name: 'email' })
   email: string;
 
-  @Column({ name: 'password', select: false })
-  @Exclude({ toPlainOnly: true })
+  @Column({ name: 'password' })
+  @Exclude()
   password: string;
 
   @ManyToOne(
