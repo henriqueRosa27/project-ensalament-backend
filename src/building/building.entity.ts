@@ -23,7 +23,7 @@ export class BuildingEntity {
     type => RoomEntity,
     room => room.building,
   )
-  room: RoomEntity[];
+  rooms: RoomEntity[];
 
   @Column({ name: 'created_at' })
   createdAt: Date;

@@ -22,7 +22,7 @@ export class RoomEntity {
 
   @ManyToOne(
     type => BuildingEntity,
-    building => building.room,
+    building => building.rooms,
   )
   @JoinColumn({ name: 'building_id' })
   building: BuildingEntity;
