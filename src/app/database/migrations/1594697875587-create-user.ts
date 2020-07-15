@@ -44,6 +44,21 @@ export class createUser1594697875587 implements MigrationInterface {
             isNullable: false,
           },
           {
+            name: 'active',
+            type: 'boolean',
+            isNullable: false,
+          },
+          {
+            name: 'created_at',
+            type: 'timestamp',
+            isNullable: false,
+          },
+          {
+            name: 'updated_at',
+            type: 'timestamp',
+            isNullable: true,
+          },
+          {
             name: 'role_id',
             type: 'int',
             isNullable: false,
@@ -62,7 +77,6 @@ export class createUser1594697875587 implements MigrationInterface {
         onDelete: 'CASCADE',
       }),
     );
-    
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
