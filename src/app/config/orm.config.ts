@@ -2,6 +2,7 @@ import { ConnectionOptions } from 'typeorm';
 import { UserEntity } from 'src/user/user.entity';
 import { RoleEntity } from 'src/auth/roles.entity';
 import { BuildingEntity } from 'src/building/building.entity';
+import { RoomEntity } from 'src/room/room.entity';
 
 const config: ConnectionOptions = {
   type: 'postgres',
@@ -13,7 +14,7 @@ const config: ConnectionOptions = {
   migrationsTransactionMode: 'each',
   migrationsRun: true,
 
-  entities: [RoleEntity, UserEntity, BuildingEntity],
+  entities: [RoleEntity, UserEntity, BuildingEntity, RoomEntity],
   migrationsTableName: 'migrations_typeorm',
   logging: true,
   logger: 'file',
