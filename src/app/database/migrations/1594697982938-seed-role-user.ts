@@ -3,6 +3,7 @@ import { RoleEntity } from 'src/auth/roles.entity';
 import { UserEntity } from 'src/user/user.entity';
 
 export class seedRoleUser1594697982938 implements MigrationInterface {
+  name = 'seedRoleUser1594697982938';
   public async up(queryRunner: QueryRunner): Promise<void> {
     const role = new RoleEntity();
     role.name = 'admin';
@@ -16,9 +17,9 @@ export class seedRoleUser1594697982938 implements MigrationInterface {
     user.surname = 'admin';
     user.email = 't@t.com';
     user.password = '123465798!';
+    user.active = true;
 
     await queryRunner.connection.manager.save(user);
-    
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
