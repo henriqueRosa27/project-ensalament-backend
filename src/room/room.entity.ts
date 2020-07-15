@@ -4,12 +4,13 @@ import {
   PrimaryGeneratedColumn,
   BeforeInsert,
   BeforeUpdate,
-  OneToMany,
+  JoinColumn,
+  ManyToOne,
 } from 'typeorm';
-import { RoomEntity } from 'src/room/room.entity';
+import { BuildingEntity } from 'src/building/building.entity';
 
-@Entity('building')
-export class BuildingEntity {
+@Entity('room')
+export class RoomEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -19,11 +20,12 @@ export class BuildingEntity {
   @Column({ name: 'active' })
   active: boolean;
 
-  @OneToMany(
-    type => RoomEntity,
-    room => room.building,
+  @ManyToOne(
+    type => BuildingEntity,
+    building => building.room,
   )
-  room: RoomEntity[];
+  @JoinColumn({ name: 'building_id' })
+  building: BuildingEntity;
 
   @Column({ name: 'created_at' })
   createdAt: Date;
