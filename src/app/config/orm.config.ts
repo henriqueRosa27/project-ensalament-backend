@@ -12,8 +12,7 @@ const config: ConnectionOptions = {
   password: '123456789!',
   database: 'ensalament',
   migrationsTransactionMode: 'each',
-  migrationsRun: true,
-
+  
   entities: [RoleEntity, UserEntity, BuildingEntity, RoomEntity],
   migrationsTableName: 'migrations_typeorm',
   logging: true,
