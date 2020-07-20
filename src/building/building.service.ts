@@ -1,7 +1,7 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BuildingEntity } from './building.entity';
-import { Repository } from 'typeorm';
+import { Repository, getRepository } from 'typeorm';
 import { BuildingDTO } from './dto/building.dto';
 import { plainToClass } from 'class-transformer';
 
@@ -14,6 +14,14 @@ export class BuildingService {
 
   async getAll(): Promise<BuildingDTO[]> {
     const building = await this.rep.find();
+    return plainToClass(BuildingDTO, building);
+  }
+
+  async findByIdActive(id: number): Promise<BuildingDTO> {
+    const qb = await getRepository(BuildingEntity);
+
+    const building = await qb.findOne({ where: { id, active: true } });
+
     return plainToClass(BuildingDTO, building);
   }
 
@@ -33,7 +41,7 @@ export class BuildingService {
 
     if (!building)
       throw new HttpException(
-        { error: 'Building não existe' },
+        { error: 'Prédio não existe' },
         HttpStatus.NOT_FOUND,
       );
 
@@ -49,7 +57,7 @@ export class BuildingService {
 
     if (!building)
       throw new HttpException(
-        { error: 'Building não existe' },
+        { error: 'Prédio não existe' },
         HttpStatus.NOT_FOUND,
       );
 
@@ -65,7 +73,7 @@ export class BuildingService {
 
     if (!building)
       throw new HttpException(
-        { error: 'Building não existe' },
+        { error: 'Prédio não existe' },
         HttpStatus.NOT_FOUND,
       );
 
@@ -73,6 +81,6 @@ export class BuildingService {
 
     await this.rep.save(building);
 
-    return null;
+    return plainToClass(BuildingDTO, building);
   }
 }
