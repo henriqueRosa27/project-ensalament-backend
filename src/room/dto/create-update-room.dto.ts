@@ -1,10 +1,5 @@
 export class CreateUpdateRoomDTO {
-    id: number;
-  
-    name: string;
-  
-    active: boolean;
+  name: string;
 
-    building_id: number;
-  }
-  
+  building_id: number;
+}

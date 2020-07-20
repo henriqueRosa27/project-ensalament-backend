@@ -16,7 +16,7 @@ export class seedRoleUser1594697982938 implements MigrationInterface {
     user.name = 'admin';
     user.surname = 'admin';
     user.email = 't@t.com';
-    user.password = '123465798!';
+    user.password = '123456798!';
     user.active = true;
 
     await queryRunner.connection.manager.save(user);
