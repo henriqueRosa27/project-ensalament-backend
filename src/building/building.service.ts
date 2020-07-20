@@ -17,6 +17,17 @@ export class BuildingService {
     return plainToClass(BuildingDTO, building);
   }
 
+  async findById(id: number): Promise<BuildingDTO> {
+    const building = await this.rep.findOne({ where: { id, active: true } });
+
+    if (!building)
+      throw new HttpException(
+        { error: 'Prédio não existe' },
+        HttpStatus.NOT_FOUND,
+      );
+    return plainToClass(BuildingDTO, building);
+  }
+
   async findByIdActive(id: number): Promise<BuildingDTO> {
     const qb = await getRepository(BuildingEntity);
 
@@ -37,13 +48,10 @@ export class BuildingService {
   }
 
   async update(dto: BuildingDTO, id: number): Promise<BuildingDTO> {
-    const building = await this.rep.findOne({ where: { id } });
-
-    if (!building)
-      throw new HttpException(
-        { error: 'Prédio não existe' },
-        HttpStatus.NOT_FOUND,
-      );
+    const building = await plainToClass(
+      BuildingEntity,
+      await this.findById(id),
+    );
 
     building.name = dto.name;
 
@@ -53,13 +61,10 @@ export class BuildingService {
   }
 
   async delete(id: number): Promise<null> {
-    const building = await this.rep.findOne({ where: { id, active: true } });
-
-    if (!building)
-      throw new HttpException(
-        { error: 'Prédio não existe' },
-        HttpStatus.NOT_FOUND,
-      );
+    const building = await plainToClass(
+      BuildingEntity,
+      await this.findById(id),
+    );
 
     building.active = false;
 
