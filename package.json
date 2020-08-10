@@ -29,6 +29,7 @@
     "@types/yup": "^0.29.3",
     "argon2": "^0.26.2",
     "class-transformer": "^0.2.3",
+    "husky": "^4.2.5",
     "node-pre-gyp": "^0.15.0",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
@@ -63,6 +64,16 @@
     "ts-node": "^8.6.2",
     "tsconfig-paths": "^3.9.0",
     "typescript": "^3.7.4"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged; npm run lint"
+    }
+  },
+  "lint-staged": {
+    "*.{ts}": [
+      "eslint --fix"
+    ]
   },
   "jest": {
     "moduleFileExtensions": [
