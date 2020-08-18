@@ -17,7 +17,7 @@ const imports = [
   RoomModule,
   CourseModule,
   TeamModule,
-  WorkloadModule
+  WorkloadModule,
 ];
 @Module({
   imports,
