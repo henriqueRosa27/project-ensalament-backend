@@ -40,8 +40,6 @@ export class UserService {
       relations: ['role'],
     });
 
-    console.log(user);
-
     if (!user || !(await argon2.verify(user.password, password))) {
       return null;
     }
