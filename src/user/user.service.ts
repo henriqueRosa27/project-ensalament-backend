@@ -6,6 +6,7 @@ import { plainToClass } from 'class-transformer';
 import { UserDTO } from './dto/user.dto';
 import { CreateUserDTO } from './dto/createUser.dto';
 import * as argon2 from 'argon2';
+import { RoleEntity } from 'src/auth/roles.entity';
 
 @Injectable()
 export class UserService {
@@ -24,6 +25,8 @@ export class UserService {
   async getUserByEmail(email: string): Promise<UserDTO> {
     const qb = await getRepository(UserEntity)
       .createQueryBuilder('user')
+      .addSelect('role')
+      .innerJoin(RoleEntity, 'role', 'role.id = user.role_id')
       .where('LOWER(user.email) = LOWER(:email)', { email });
 
     const user = await qb.getOne();
@@ -32,11 +35,12 @@ export class UserService {
   }
 
   async validateUser(email: string, password: string): Promise<UserDTO> {
-    const qb = await getRepository(UserEntity)
-      .createQueryBuilder('user')
-      .where('LOWER(user.email) = LOWER(:email)', { email });
+    const user = await getRepository(UserEntity).findOne({
+      where: { email },
+      relations: ['role'],
+    });
 
-    const user = await qb.getOne();
+    console.log(user);
 
     if (!user || !(await argon2.verify(user.password, password))) {
       return null;
