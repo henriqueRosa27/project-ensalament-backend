@@ -25,7 +25,12 @@ export class createRoom1594787784299 implements MigrationInterface {
             length: '100',
             isNullable: false,
           },
-
+          {
+            name: 'is_lab',
+            type: 'boolean',
+            isNullable: false,
+            default: false
+          },
           {
             name: 'active',
             type: 'boolean',

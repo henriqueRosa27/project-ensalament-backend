@@ -22,6 +22,12 @@ export class createTeam1595381058201 implements MigrationInterface {
             isNullable: false,
           },
           {
+            name: 'pref_lab',
+            type: 'boolean',
+            isNullable: false,
+            default: false
+          },
+          {
             name: 'active',
             type: 'boolean',
             isNullable: false,

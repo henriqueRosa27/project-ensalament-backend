@@ -31,7 +31,7 @@ export class AuthService {
       },
     };
     return {
-      token: this.jwtService.sign(payload),
+      token: this.jwtService.sign(payload,),
     };
   }
 }

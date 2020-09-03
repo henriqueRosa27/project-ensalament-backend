@@ -15,12 +15,15 @@ export class RoomService {
   ) {}
 
   async getAll(): Promise<RoomDTO[]> {
-    const rooms = await this.rep.find();
+    const rooms = await this.rep.find({ relations: ['building'] });
     return plainToClass(RoomDTO, rooms);
   }
 
   async findById(id: number): Promise<RoomDTO> {
-    const room = await this.rep.findOne({ where: { id, active: true } });
+    const room = await this.rep.findOne({
+      where: { id, active: true },
+      relations: ['building'],
+    });
 
     if (!room)
       throw new HttpException(
@@ -38,6 +41,7 @@ export class RoomService {
 
     room.name = dto.name;
     room.active = true;
+    room.isLab = dto.is_lab ? dto.is_lab : false;
     room.building = building;
 
     const entity = await this.rep.save(room);

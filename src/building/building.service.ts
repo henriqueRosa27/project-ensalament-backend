@@ -17,6 +17,15 @@ export class BuildingService {
     return plainToClass(BuildingDTO, building);
   }
 
+  async getAllActive(): Promise<BuildingDTO[]> {
+    const building = await this.rep.find({
+      where: {
+        active: true,
+      },
+    });
+    return plainToClass(BuildingDTO, building);
+  }
+
   async findById(id: number): Promise<BuildingDTO> {
     const building = await this.rep.findOne({ where: { id, active: true } });
 

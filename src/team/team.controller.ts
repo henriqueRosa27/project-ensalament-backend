@@ -1,4 +1,5 @@
 import { Controller, SetMetadata, UseGuards, Get, UsePipes, Post, Body, Put, Param, ParseIntPipe, Delete, Patch } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { TeamService } from './team.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/roles.guard';
@@ -6,6 +7,7 @@ import { TeamDTO } from './dto/team.dto';
 import { JoiValidationPipe } from 'src/app/shared/pipe/validation.pipe';
 import { teamValidation } from './dto/team.validation';
 
+@ApiTags('team')
 @Controller('team')
 export class TeamController {
   constructor(private readonly service: TeamService) {}
@@ -15,6 +17,13 @@ export class TeamController {
   @Get()
   async getAll(): Promise<TeamDTO[]> {
     return this.service.getAll();
+  }
+
+  @SetMetadata('roles', ['admin'])
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Get(':id')
+  async finById(@Param('id', ParseIntPipe) id: number): Promise<TeamDTO> {
+    return await this.service.findById(id);
   }
 
   @SetMetadata('roles', ['admin'])

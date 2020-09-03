@@ -5,7 +5,6 @@ import { BuildingEntity } from 'src/building/building.entity';
 import { RoomEntity } from 'src/room/room.entity';
 import { CourseEntity } from 'src/course/course.entity';
 import { TeamEntity } from 'src/team/team.entity';
-import { WorkloadEntity } from 'src/workload/workload.entity';
 
 import 'dotenv/config';
 
@@ -28,7 +27,6 @@ const config: ConnectionOptions = {
     RoomEntity,
     CourseEntity,
     TeamEntity,
-    WorkloadEntity,
   ],
   migrationsTableName: 'migrations_typeorm',
   logging: true,

@@ -1,4 +1,5 @@
 import { Controller, SetMetadata, UseGuards, Get, UsePipes, Post, Body, Put, Param, ParseIntPipe, Delete, Patch } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { CourseService } from './course.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/roles.guard';
@@ -6,6 +7,7 @@ import { CourseDTO } from './dto/course.dto';
 import { courseValidation } from './dto/course.validation';
 import { JoiValidationPipe } from 'src/app/shared/pipe/validation.pipe';
 
+@ApiTags('course')
 @Controller('course')
 export class CourseController {
   constructor(private readonly service: CourseService) {}
@@ -15,6 +17,13 @@ export class CourseController {
   @Get()
   async getAll(): Promise<CourseDTO[]> {
     return this.service.getAll();
+  }
+
+  @SetMetadata('roles', ['admin'])
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Get(':id')
+  async finById(@Param('id', ParseIntPipe) id: number): Promise<CourseDTO> {
+    return await this.service.findById(id);
   }
 
   @SetMetadata('roles', ['admin'])

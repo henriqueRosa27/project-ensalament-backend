@@ -17,6 +17,9 @@ export class TeamEntity {
   @Column({ name: 'active' })
   active: boolean;
 
+  @Column({ name: 'pref_lab' })
+  prefLab: boolean;
+
   @Column({ name: 'created_at' })
   createdAt: Date;
 

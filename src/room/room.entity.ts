@@ -20,6 +20,9 @@ export class RoomEntity {
   @Column({ name: 'active' })
   active: boolean;
 
+  @Column({ name: 'is_lab' })
+  isLab: boolean;
+
   @ManyToOne(
     type => BuildingEntity,
     building => building.rooms,

@@ -4,4 +4,6 @@ export class TeamDTO {
   name: string;
 
   active: boolean;
+
+  prefLab: boolean;
 }

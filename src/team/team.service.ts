@@ -37,14 +37,16 @@ export class TeamService {
   }
 
   async create(dto: TeamDTO): Promise<TeamDTO> {
-    const team = new TeamEntity();
+    // const team = new TeamEntity();
 
-    team.name = dto.name;
-    team.active = true;
+    // team.name = dto.name;
+    // team.active = true;
+    // team.prefLab = dto.prefLab? dto.prefLab: false;
 
-    const entity = await this.rep.save(team);
+    // const entity = await this.rep.save(team);
 
-    return plainToClass(TeamDTO, entity);
+    // return plainToClass(TeamDTO, entity);
+    return dto
   }
 
   async update(dto: TeamDTO, id: number): Promise<TeamDTO> {
