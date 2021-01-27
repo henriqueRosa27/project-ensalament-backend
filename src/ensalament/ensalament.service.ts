@@ -29,7 +29,7 @@ export class EnsalamentService {
   ) {}
 
   async getAlBuildings(week: number, shift: number): Promise<BuildingDTO[]> {
-    let buildingsDB = await this.repBuilding
+    const buildingsDB = await this.repBuilding
       .createQueryBuilder('building')
       .where('building.active = true')
       .orderBy('building.createdAt', 'ASC')
@@ -64,7 +64,7 @@ export class EnsalamentService {
 
     const courses = new Array<CourseEntity>();
 
-    for (let course of coursesDB) {
+    for (const course of coursesDB) {
       course.teams = await this.repTeam
         .createQueryBuilder('team')
         .where('team.active = true')
@@ -98,7 +98,7 @@ export class EnsalamentService {
       .andWhere('course.active = true')
       .getMany();
 
-    let ensalamentService = new GenerateEnsalamentService(rooms, teams);
+    const ensalamentService = new GenerateEnsalamentService(rooms, teams);
 
     return ensalamentService.generate();
   }
