@@ -1,4 +1,16 @@
-import { Controller, SetMetadata, UseGuards, Get, UsePipes, Post, Body, Put, Param, ParseIntPipe, Delete, Patch } from '@nestjs/common';
+import {
+  Controller,
+  SetMetadata,
+  UseGuards,
+  Get,
+  UsePipes,
+  Post,
+  Body,
+  Put,
+  Param,
+  Delete,
+  Patch,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CourseService } from './course.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
@@ -21,8 +33,15 @@ export class CourseController {
 
   @SetMetadata('roles', ['admin'])
   @UseGuards(JwtAuthGuard, RolesGuard)
+  @Get('/active')
+  async getAllActivies(): Promise<CourseDTO[]> {
+    return this.service.getAllActive();
+  }
+
+  @SetMetadata('roles', ['admin'])
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get(':id')
-  async finById(@Param('id', ParseIntPipe) id: number): Promise<CourseDTO> {
+  async finById(@Param('id') id: string): Promise<CourseDTO> {
     return await this.service.findById(id);
   }
 
@@ -40,7 +59,7 @@ export class CourseController {
   @Put(':id')
   async update(
     @Body() dto: CourseDTO,
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id') id: string,
   ): Promise<CourseDTO> {
     return await this.service.update(dto, id);
   }
@@ -48,14 +67,14 @@ export class CourseController {
   @SetMetadata('roles', ['admin'])
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Delete(':id')
-  async delete(@Param('id', ParseIntPipe) id: number): Promise<null> {
+  async delete(@Param('id') id: string): Promise<null> {
     return await this.service.delete(id);
   }
 
   @SetMetadata('roles', ['admin'])
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Patch(':id')
-  async reactive(@Param('id', ParseIntPipe) id: number): Promise<CourseDTO> {
+  async reactive(@Param('id') id: string): Promise<CourseDTO> {
     return await this.service.reactive(id);
   }
 }

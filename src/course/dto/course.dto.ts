@@ -1,5 +1,5 @@
 export class CourseDTO {
-  id: number;
+  id: string;
 
   name: string;
 

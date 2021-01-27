@@ -14,15 +14,20 @@ export class createRoom1594787784299 implements MigrationInterface {
         columns: [
           {
             name: 'id',
-            type: 'int',
+            type: 'uuid',
             isPrimary: true,
-            isGenerated: true,
-            isNullable: false,
+            generationStrategy: 'uuid',
+            default: 'uuid_generate_v4()',
           },
           {
             name: 'name',
             type: 'varchar',
             length: '100',
+            isNullable: false,
+          },
+          {
+            name: 'capacity',
+            type: 'int',
             isNullable: false,
           },
           {
@@ -48,7 +53,7 @@ export class createRoom1594787784299 implements MigrationInterface {
           },
           {
             name: 'building_id',
-            type: 'int',
+            type: 'uuid',
             isNullable: false,
           },
         ],

@@ -10,8 +10,8 @@ import { RoomEntity } from 'src/room/room.entity';
 
 @Entity('building')
 export class BuildingEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
 
   @Column({ name: 'name' })
   name: string;

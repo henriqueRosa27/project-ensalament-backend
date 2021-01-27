@@ -13,7 +13,7 @@ export class BuildingService {
   ) {}
 
   async getAll(): Promise<BuildingDTO[]> {
-    const building = await this.rep.find();
+    const building = await this.rep.find({ order: { createdAt: 'ASC' } });
     return plainToClass(BuildingDTO, building);
   }
 
@@ -26,7 +26,7 @@ export class BuildingService {
     return plainToClass(BuildingDTO, building);
   }
 
-  async findById(id: number): Promise<BuildingDTO> {
+  async findById(id: string): Promise<BuildingDTO> {
     const building = await this.rep.findOne({ where: { id, active: true } });
 
     if (!building)
@@ -37,7 +37,7 @@ export class BuildingService {
     return plainToClass(BuildingDTO, building);
   }
 
-  async findByIdActive(id: number): Promise<BuildingDTO> {
+  async findByIdActive(id: string): Promise<BuildingDTO> {
     const qb = await getRepository(BuildingEntity);
 
     const building = await qb.findOne({ where: { id, active: true } });
@@ -56,7 +56,7 @@ export class BuildingService {
     return plainToClass(BuildingDTO, entity);
   }
 
-  async update(dto: BuildingDTO, id: number): Promise<BuildingDTO> {
+  async update(dto: BuildingDTO, id: string): Promise<BuildingDTO> {
     const building = await plainToClass(
       BuildingEntity,
       await this.findById(id),
@@ -69,7 +69,7 @@ export class BuildingService {
     return plainToClass(BuildingDTO, entity);
   }
 
-  async delete(id: number): Promise<null> {
+  async delete(id: string): Promise<null> {
     const building = await plainToClass(
       BuildingEntity,
       await this.findById(id),
@@ -82,7 +82,7 @@ export class BuildingService {
     return null;
   }
 
-  async reactive(id: number): Promise<BuildingDTO> {
+  async reactive(id: string): Promise<BuildingDTO> {
     const building = await this.rep.findOne({ where: { id } });
 
     if (!building)

@@ -8,7 +8,6 @@ import {
   UsePipes,
   Param,
   Put,
-  ParseIntPipe,
   Delete,
   Patch,
 } from '@nestjs/common';
@@ -34,7 +33,7 @@ export class BuildingController {
 
   @SetMetadata('roles', ['admin'])
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Get("/active")
+  @Get('/active')
   async getAllActivies(): Promise<BuildingDTO[]> {
     return this.service.getAllActive();
   }
@@ -42,7 +41,7 @@ export class BuildingController {
   @SetMetadata('roles', ['admin'])
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Get(':id')
-  async finById(@Param('id', ParseIntPipe) id: number): Promise<BuildingDTO> {
+  async finById(@Param('id') id: string): Promise<BuildingDTO> {
     return await this.service.findById(id);
   }
 
@@ -60,7 +59,7 @@ export class BuildingController {
   @Put(':id')
   async update(
     @Body() dto: BuildingDTO,
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id') id: string,
   ): Promise<BuildingDTO> {
     return await this.service.update(dto, id);
   }
@@ -68,14 +67,14 @@ export class BuildingController {
   @SetMetadata('roles', ['admin'])
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Delete(':id')
-  async delete(@Param('id', ParseIntPipe) id: number): Promise<null> {
+  async delete(@Param('id') id: string): Promise<null> {
     return await this.service.delete(id);
   }
 
   @SetMetadata('roles', ['admin'])
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Patch(':id')
-  async reactive(@Param('id', ParseIntPipe) id: number): Promise<BuildingDTO> {
+  async reactive(@Param('id') id: string): Promise<BuildingDTO> {
     return await this.service.reactive(id);
   }
 }

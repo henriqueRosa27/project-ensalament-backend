@@ -17,7 +17,16 @@ export class CourseService {
     return plainToClass(CourseDTO, courses);
   }
 
-  async findById(id: number): Promise<CourseDTO> {
+  async getAllActive(): Promise<CourseDTO[]> {
+    const courses = await this.rep.find({
+      where: {
+        active: true,
+      },
+    });
+    return plainToClass(CourseDTO, courses);
+  }
+
+  async findById(id: string): Promise<CourseDTO> {
     const course = await this.rep.findOne({ where: { id, active: true } });
 
     if (!course)
@@ -28,7 +37,7 @@ export class CourseService {
     return plainToClass(CourseDTO, course);
   }
 
-  async findByIdActive(id: number): Promise<CourseDTO> {
+  async findByIdActive(id: string): Promise<CourseDTO> {
     const qb = await getRepository(CourseEntity);
 
     const course = await qb.findOne({ where: { id, active: true } });
@@ -47,7 +56,7 @@ export class CourseService {
     return plainToClass(CourseDTO, entity);
   }
 
-  async update(dto: CourseDTO, id: number): Promise<CourseDTO> {
+  async update(dto: CourseDTO, id: string): Promise<CourseDTO> {
     const course = await plainToClass(
       CourseEntity,
       await this.findById(id),
@@ -60,7 +69,7 @@ export class CourseService {
     return plainToClass(CourseDTO, entity);
   }
 
-  async delete(id: number): Promise<null> {
+  async delete(id: string): Promise<null> {
     const course = await plainToClass(
       CourseEntity,
       await this.findById(id),
@@ -73,7 +82,7 @@ export class CourseService {
     return null;
   }
 
-  async reactive(id: number): Promise<CourseDTO> {
+  async reactive(id: string): Promise<CourseDTO> {
     const course = await this.rep.findOne({ where: { id } });
 
     if (!course)

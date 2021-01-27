@@ -8,8 +8,8 @@ import { BeforeUpdate } from 'typeorm';
 
 @Entity('user')
 export class UserEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
 
   @Column({ name: 'name' })
   name: string;

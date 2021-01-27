@@ -1,7 +1,7 @@
 import { RoomDTO } from "src/room/dto/room.dto";
 
 export class BuildingDTO {
-  id: number;
+  id: string;
 
   name: string;
 

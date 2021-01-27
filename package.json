@@ -30,7 +30,7 @@
     "@nestjs/swagger": "^4.6.0",
     "@nestjs/typeorm": "^7.1.0",
     "@types/yup": "^0.29.3",
-    "argon2": "^0.26.2",
+    "argon2": "^0.27.1",
     "class-transformer": "^0.2.3",
     "dotenv": "^8.2.0",
     "husky": "^4.2.5",
@@ -43,7 +43,8 @@
     "rimraf": "^3.0.2",
     "rxjs": "^6.5.4",
     "swagger-ui-express": "^4.1.4",
-    "typeorm": "^0.2.25",
+    "typeorm": "^0.2.30",
+    "uuidv4": "^6.2.6",
     "yup": "^0.29.1"
   },
   "devDependencies": {
