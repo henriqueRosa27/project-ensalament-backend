@@ -11,7 +11,11 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { BuildingDTO } from 'src/building/dto/building.dto';
 import { CourseDTO } from 'src/course/dto/course.dto';
-import { GenerateEnsalament, RequestGenerateEnsalament } from './dto/ensalament.dto';
+import { CreateEnsalamentDTO } from './dto/create-ensalament.dto';
+import {
+  GenerateEnsalament,
+  RequestGenerateEnsalament,
+} from './dto/ensalament.dto';
 import { EnsalamentService } from './ensalament.service';
 
 @Controller('ensalament')
@@ -30,7 +34,7 @@ export class EnsalamentController {
 
   @SetMetadata('roles', ['admin'])
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Get('/courses/:week?/:shift?')
+  @Get('/courses/:week/:shift')
   async getAllCourses(
     @Param('week') week: number,
     @Param('shift') shift: number,
@@ -41,7 +45,16 @@ export class EnsalamentController {
   @SetMetadata('roles', ['admin'])
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Post('/generate')
-  async generate(@Body() dto: RequestGenerateEnsalament): Promise<GenerateEnsalament> {
+  async generate(
+    @Body() dto: RequestGenerateEnsalament,
+  ): Promise<GenerateEnsalament> {
     return this.service.generate(dto.roomsIds, dto.teamsIds);
+  }
+
+  @SetMetadata('roles', ['admin'])
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Post('/')
+  async create(@Body() dto: CreateEnsalamentDTO) {
+    return this.service.create(dto);
   }
 }

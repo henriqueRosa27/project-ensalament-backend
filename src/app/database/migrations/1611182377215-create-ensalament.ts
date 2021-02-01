@@ -1,9 +1,4 @@
-import {
-  MigrationInterface,
-  QueryRunner,
-  Table,
-  TableForeignKey,
-} from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class createEnsalament1611182377215 implements MigrationInterface {
   name = 'createEnsalament1611182377215';
@@ -31,16 +26,6 @@ export class createEnsalament1611182377215 implements MigrationInterface {
             isNullable: false,
           },
           {
-            name: 'team_id',
-            type: 'uuid',
-            isNullable: false,
-          },
-          {
-            name: 'room_id',
-            type: 'uuid',
-            isNullable: false,
-          },
-          {
             name: 'active',
             type: 'boolean',
             isNullable: false,
@@ -59,25 +44,6 @@ export class createEnsalament1611182377215 implements MigrationInterface {
       }),
       true,
     );
-    await queryRunner.createForeignKey(
-      'ensalament',
-      new TableForeignKey({
-        columnNames: ['team_id'],
-        referencedColumnNames: ['id'],
-        referencedTableName: 'team',
-        onDelete: 'CASCADE',
-      }),
-    );
-
-    await queryRunner.createForeignKey(
-        'ensalament',
-        new TableForeignKey({
-          columnNames: ['room_id'],
-          referencedColumnNames: ['id'],
-          referencedTableName: 'room',
-          onDelete: 'CASCADE',
-        }),
-      );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {

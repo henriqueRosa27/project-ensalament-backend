@@ -35,12 +35,6 @@ export class RoomEntity {
   @JoinColumn({ name: 'building_id' })
   building: BuildingEntity;
 
-  @OneToMany(
-    () => EnsalamentEntity,
-    ensalement => ensalement.room,
-  )
-  ensalements: EnsalamentEntity[];
-
   @Column({ name: 'building_id', select: false })
   buildingId: string;
 

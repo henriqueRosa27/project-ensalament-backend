@@ -43,7 +43,7 @@ export class GenerateEnsalamentService {
   }
 
   setPreferencials() {
-    const preferencialsRooms = this.rooms
+    let preferencialsRooms = this.rooms
       .filter(room => room.isLab)
       .sort((a, b) => this.compare(a, b, 'capacity'));
     const preferencialsTeams = this.teams
@@ -51,6 +51,7 @@ export class GenerateEnsalamentService {
       .sort((a, b) => this.compare(a, b, 'numberStudents'));
 
     for (const team of preferencialsTeams) {
+      if (!!preferencialsRooms) break;
       const roomMaxCapacity = preferencialsRooms.reduce((prev, current) => {
         {
           return prev.capacity > current.capacity ? prev : current;
@@ -59,6 +60,9 @@ export class GenerateEnsalamentService {
 
       if (team.numberStudents <= roomMaxCapacity.capacity) {
         this.setTeamOnRoom(roomMaxCapacity, team);
+        preferencialsRooms = preferencialsRooms.filter(
+          rooms => rooms.id !== roomMaxCapacity.id,
+        );
       }
     }
   }
@@ -95,6 +99,7 @@ export class GenerateEnsalamentService {
         const { building, ...rest } = { ...room };
         data.rooms.forEach(r => {
           if (r.id === room.id) {
+            console.log(team);
             r.team = team;
           }
         });

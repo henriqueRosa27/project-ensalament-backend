@@ -8,7 +8,9 @@ import {
   BeforeUpdate,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
+import { EnsalamentRoomEntity } from './virtual/ensalament-room.entity';
 
 @Entity('ensalament')
 export class EnsalamentEntity {
@@ -27,25 +29,15 @@ export class EnsalamentEntity {
   @Column({ name: 'updated_at' })
   updateAt: Date;
 
-  @ManyToOne(
-    () => TeamEntity,
-    team => team.ensalements,
+  @Column({ name: 'active' })
+  active: boolean;
+
+  @OneToMany(
+    () => EnsalamentRoomEntity,
+    ensalamentRoom => ensalamentRoom.ensalament,
+    { cascade: true, eager: true },
   )
-  @JoinColumn({ name: 'team_id' })
-  team: TeamEntity;
-
-  @Column({ name: 'team_id', select: false })
-  teamId: string;
-
-  @ManyToOne(
-    () => RoomEntity,
-    room => room.ensalements,
-  )
-  @JoinColumn({ name: 'room_id' })
-  room: RoomEntity;
-
-  @Column({ name: 'room_id', select: false })
-  roomId: string;
+  ensalamentRooms: EnsalamentRoomEntity[];
 
   @BeforeInsert()
   updateCreatedAt(): void {

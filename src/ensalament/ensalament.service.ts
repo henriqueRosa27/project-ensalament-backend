@@ -8,10 +8,12 @@ import { CourseDTO } from 'src/course/dto/course.dto';
 import { RoomEntity } from 'src/room/room.entity';
 import { TeamEntity } from 'src/team/team.entity';
 import { Repository } from 'typeorm';
-import { uuid } from 'uuidv4';
+import { CreateEnsalamentDTO } from './dto/create-ensalament.dto';
 import { GenerateEnsalament } from './dto/ensalament.dto';
 import { EnsalamentEntity } from './ensalament.entity';
 import { GenerateEnsalamentService } from './generate.service';
+import { EnsalamentRoomTeamEntity } from './virtual/ensalament-room-team.entity';
+import { EnsalamentRoomEntity } from './virtual/ensalament-room.entity';
 
 @Injectable()
 export class EnsalamentService {
@@ -35,7 +37,9 @@ export class EnsalamentService {
       .orderBy('building.createdAt', 'ASC')
       .getMany();
 
-    const sqlEnsalament = this.getEnsalemntSql(week, shift, 'room_id');
+    const sqlEnsalament = this.getEnsalemntSql(week, shift, false);
+
+    console.log(sqlEnsalament);
 
     const buildings = new Array<BuildingEntity>();
     for (const building of buildingsDB) {
@@ -60,10 +64,9 @@ export class EnsalamentService {
       .orderBy('course.createdAt', 'ASC')
       .getMany();
 
-    const sqlEnsalament = this.getEnsalemntSql(week, shift, 'team_id');
+    const sqlEnsalament = this.getEnsalemntSql(week, shift, true);
 
     const courses = new Array<CourseEntity>();
-
     for (const course of coursesDB) {
       course.teams = await this.repTeam
         .createQueryBuilder('team')
@@ -103,19 +106,50 @@ export class EnsalamentService {
     return ensalamentService.generate();
   }
 
-  getEnsalemntSql(week: number, shift: number, paremeter: string): string {
-    let sqlEnsalament = this.repEnsalament.createQueryBuilder('ensalament');
+  async create(dto: CreateEnsalamentDTO) {
+    const ensalament = new EnsalamentEntity();
 
-    if (week) {
-      sqlEnsalament = sqlEnsalament.where(`week_day = ${week} `);
+    ensalament.week = dto.week;
+    ensalament.shift = dto.shift;
+    ensalament.active = true;
+    console.log(ensalament);
+
+    ensalament.ensalamentRooms = dto.rooms.map(room => {
+      const ensalamentRoom = new EnsalamentRoomEntity();
+      ensalamentRoom.roomId = room.id;
+
+      ensalamentRoom.ensalamentRoomTeams = room.teams.map(team => {
+        const ensalamentRoomTeam = new EnsalamentRoomTeamEntity();
+
+        ensalamentRoomTeam.teamId = team;
+
+        return ensalamentRoomTeam;
+      });
+
+      return ensalamentRoom;
+    });
+
+    return this.repEnsalament.save(ensalament);
+  }
+
+  getEnsalemntSql(week: number, shift: number, byTeam: boolean): string {
+    let sqlEnsalament = this.repEnsalament
+      .createQueryBuilder('ensalament')
+      .where(`week_day = ${week} `)
+      .andWhere(`shift = ${shift}`);
+
+    sqlEnsalament = sqlEnsalament.innerJoin(
+      'ensalament.ensalamentRooms',
+      'rooms',
+    );
+
+    if (byTeam) {
+      return sqlEnsalament
+        .select('teams.team_id')
+        .innerJoin('rooms.ensalamentRoomTeams', 'teams')
+        .getSql();
     }
 
-    if (week && shift) {
-      sqlEnsalament = sqlEnsalament.andWhere(`shift = ${shift}`);
-    } else if (shift) {
-      sqlEnsalament = sqlEnsalament.where(`shift = ${shift}`);
-    }
-
-    return sqlEnsalament.select(paremeter).getSql();
+    return sqlEnsalament.select('rooms.room_id').getSql();
   }
 }

@@ -13,7 +13,7 @@ import {
 
 @Entity('team')
 export class TeamEntity {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ name: 'name' })
@@ -43,12 +43,6 @@ export class TeamEntity {
 
   @Column({ name: 'course_id', select: false })
   courseId: string;
-
-  @OneToMany(
-    () => EnsalamentEntity,
-    ensalement => ensalement.team,
-  )
-  ensalements: EnsalamentEntity[];
 
   @BeforeInsert()
   updateCreatedAt(): void {
