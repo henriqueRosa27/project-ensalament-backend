@@ -96,7 +96,7 @@ export class GenerateEnsalamentService {
   setTeamOnRoom(room: RoomEntity, team: TeamEntity): void {
     this.ensalament.data.forEach(data => {
       if (room.building.id === data.id) {
-        const { building: _, ...rest } = { ...room };
+        const { building: _building, ...rest } = { ...room };
         data.rooms.forEach(r => {
           if (r.id === room.id) {
             console.log(team);
@@ -148,7 +148,7 @@ export class GenerateEnsalamentService {
     createdAt: Date;
     updateAt: Date;
   }[] {
-    const newRooms = rooms.map(({ building: _, ...rest }) => ({
+    const newRooms = rooms.map(({ building: _building, ...rest }) => ({
       ...rest,
       team: null,
     }));
