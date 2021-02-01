@@ -22,6 +22,7 @@ import {
   createEnsalamentValidation,
   generateEnsalamentValidation,
 } from './dto/ensalament.validation';
+import { EnsalamentEntity } from './ensalament.entity';
 import { EnsalamentService } from './ensalament.service';
 
 @Controller('ensalament')
@@ -62,7 +63,7 @@ export class EnsalamentController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @UsePipes(new JoiValidationPipe(createEnsalamentValidation))
   @Post('/')
-  async create(@Body() dto: CreateEnsalamentDTO) {
+  async create(@Body() dto: CreateEnsalamentDTO): Promise<EnsalamentEntity> {
     return this.service.create(dto);
   }
 }

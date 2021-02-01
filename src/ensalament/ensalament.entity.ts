@@ -1,13 +1,9 @@
-import { RoomEntity } from 'src/room/room.entity';
-import { TeamEntity } from 'src/team/team.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   BeforeInsert,
   BeforeUpdate,
-  ManyToOne,
-  JoinColumn,
   OneToMany,
 } from 'typeorm';
 import { EnsalamentRoomEntity } from './virtual/ensalament-room.entity';

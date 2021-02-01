@@ -106,7 +106,7 @@ export class EnsalamentService {
     return ensalamentService.generate();
   }
 
-  async create(dto: CreateEnsalamentDTO) {
+  async create(dto: CreateEnsalamentDTO): Promise<EnsalamentEntity> {
     const ensalament = new EnsalamentEntity();
 
     ensalament.week = dto.week;
