@@ -148,7 +148,7 @@ export class GenerateEnsalamentService {
     createdAt: Date;
     updateAt: Date;
   }[] {
-    const newRooms = rooms.map(({ building, ...rest }) => ({
+    const newRooms = rooms.map(({ building: _, ...rest }) => ({
       ...rest,
       team: null,
     }));
