@@ -20,7 +20,7 @@ export class BuildingEntity {
   active: boolean;
 
   @OneToMany(
-    type => RoomEntity,
+    () => RoomEntity,
     room => room.building,
   )
   rooms: RoomEntity[];

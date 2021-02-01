@@ -26,7 +26,7 @@ export class CourseEntity {
   updateAt: Date;
 
   @OneToMany(
-    type => TeamEntity,
+    () => TeamEntity,
     room => room.course,
   )
   teams: TeamEntity[];

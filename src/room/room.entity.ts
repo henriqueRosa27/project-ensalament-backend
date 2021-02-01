@@ -6,10 +6,8 @@ import {
   BeforeUpdate,
   JoinColumn,
   ManyToOne,
-  OneToMany,
 } from 'typeorm';
 import { BuildingEntity } from 'src/building/building.entity';
-import { EnsalamentEntity } from 'src/ensalament/ensalament.entity';
 
 @Entity('room')
 export class RoomEntity {

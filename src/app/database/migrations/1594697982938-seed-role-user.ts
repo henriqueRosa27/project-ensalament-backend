@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner, getRepository } from 'typeorm';
+import { MigrationInterface, QueryRunner } from 'typeorm';
 import { RoleEntity } from 'src/auth/roles.entity';
 import { UserEntity } from 'src/user/user.entity';
 
@@ -23,6 +23,8 @@ export class seedRoleUser1594697982938 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    //not implemented
+    await queryRunner.connection.manager.delete(UserEntity, {
+      where: { email: 't@t.com' },
+    });
   }
 }

@@ -1,5 +1,4 @@
 import { CourseEntity } from 'src/course/course.entity';
-import { EnsalamentEntity } from 'src/ensalament/ensalament.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -8,7 +7,6 @@ import {
   BeforeUpdate,
   ManyToOne,
   JoinColumn,
-  OneToMany,
 } from 'typeorm';
 
 @Entity('team')

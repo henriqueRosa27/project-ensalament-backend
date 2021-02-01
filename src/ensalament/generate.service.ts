@@ -15,7 +15,7 @@ export class GenerateEnsalamentService {
   rooms: RoomEntity[];
   teams: TeamEntity[];
 
-  generate() {
+  generate(): GenerateEnsalament {
     this.excludeMaxCapacity();
 
     if (this.checkToCallFunctions()) this.setPreferencials();
@@ -34,7 +34,7 @@ export class GenerateEnsalamentService {
     return this.rooms.length > 0 && this.teams.length > 0;
   }
 
-  excludeMaxCapacity() {
+  excludeMaxCapacity(): void {
     for (const team of this.teams) {
       if (this.rooms.every(room => room.capacity < team.numberStudents)) {
         this.setTeamOnNoEnsalate(team);
@@ -42,7 +42,7 @@ export class GenerateEnsalamentService {
     }
   }
 
-  setPreferencials() {
+  setPreferencials(): void {
     let preferencialsRooms = this.rooms
       .filter(room => room.isLab)
       .sort((a, b) => this.compare(a, b, 'capacity'));
@@ -67,7 +67,7 @@ export class GenerateEnsalamentService {
     }
   }
 
-  setDatas() {
+  setDatas(): void {
     for (const team of this.teams) {
       const roomMaxCapacity = this.rooms.reduce((prev, current) => {
         {
@@ -83,7 +83,7 @@ export class GenerateEnsalamentService {
     }
   }
 
-  compare<T>(a: T, b: T, property: string) {
+  compare<T>(a: T, b: T, property: string): 1 | 0 | -1 {
     if (a[property] > b[property]) {
       return -1;
     }
@@ -93,7 +93,7 @@ export class GenerateEnsalamentService {
     return 0;
   }
 
-  setTeamOnRoom(room: RoomEntity, team: TeamEntity) {
+  setTeamOnRoom(room: RoomEntity, team: TeamEntity): void {
     this.ensalament.data.forEach(data => {
       if (room.building.id === data.id) {
         const { building, ...rest } = { ...room };
@@ -109,13 +109,13 @@ export class GenerateEnsalamentService {
     });
   }
 
-  setTeamOnNoEnsalate(team: TeamEntity) {
+  setTeamOnNoEnsalate(team: TeamEntity): void {
     this.ensalament.notEnsalate.push(team);
 
     this.excludeTeam(team.id);
   }
 
-  formatDataToEnsalament() {
+  formatDataToEnsalament(): void {
     this.rooms
       .map(({ building }) => building)
       .forEach(building => {
@@ -128,14 +128,26 @@ export class GenerateEnsalamentService {
       });
   }
 
-  excludeRoom(id: string) {
+  excludeRoom(id: string): void {
     this.rooms = this.rooms.filter(r => r.id !== id);
   }
-  excludeTeam(id: string) {
+  excludeTeam(id: string): void {
     this.teams = this.teams.filter(t => t.id !== id);
   }
 
-  formatToSetRoom(rooms: RoomEntity[]) {
+  formatToSetRoom(
+    rooms: RoomEntity[],
+  ): {
+    team: any;
+    id: string;
+    name: string;
+    capacity: number;
+    isLab: boolean;
+    active: boolean;
+    buildingId: string;
+    createdAt: Date;
+    updateAt: Date;
+  }[] {
     const newRooms = rooms.map(({ building, ...rest }) => ({
       ...rest,
       team: null,

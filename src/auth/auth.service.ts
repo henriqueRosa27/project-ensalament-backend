@@ -2,7 +2,6 @@ import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDTO } from './dto/login.dto';
 import { UserService } from 'src/user/user.service';
-import * as argon2 from 'argon2';
 
 @Injectable()
 export class AuthService {
@@ -11,7 +10,7 @@ export class AuthService {
     private readonly userService: UserService,
   ) {}
 
-  async login(dto: LoginDTO) {
+  async login(dto: LoginDTO): Promise<{ token: string }> {
     const user = await this.userService.validateUser(dto.email, dto.password);
 
     if (!user) {
@@ -31,7 +30,7 @@ export class AuthService {
       },
     };
     return {
-      token: this.jwtService.sign(payload,),
+      token: this.jwtService.sign(payload),
     };
   }
 }

@@ -34,7 +34,7 @@ export class UserEntity {
   updateAt: Date;
 
   @ManyToOne(
-    type => RoleEntity,
+    () => RoleEntity,
     role => role.users,
   )
   @JoinColumn({ name: 'role_id' })

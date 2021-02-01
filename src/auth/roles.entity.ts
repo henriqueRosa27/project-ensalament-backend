@@ -10,7 +10,7 @@ export class RoleEntity {
   name: string;
 
   @OneToMany(
-    type => UserEntity,
+    () => UserEntity,
     user => user.role,
   )
   users: UserEntity[];
