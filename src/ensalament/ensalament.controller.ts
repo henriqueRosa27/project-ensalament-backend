@@ -6,7 +6,9 @@ import {
   Post,
   SetMetadata,
   UseGuards,
+  UsePipes,
 } from '@nestjs/common';
+import { JoiValidationPipe } from 'src/app/shared/pipe/validation.pipe';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { BuildingDTO } from 'src/building/dto/building.dto';
@@ -16,6 +18,10 @@ import {
   GenerateEnsalament,
   RequestGenerateEnsalament,
 } from './dto/ensalament.dto';
+import {
+  createEnsalamentValidation,
+  generateEnsalamentValidation,
+} from './dto/ensalament.validation';
 import { EnsalamentService } from './ensalament.service';
 
 @Controller('ensalament')
@@ -42,8 +48,9 @@ export class EnsalamentController {
     return this.service.getAllCourses(week, shift);
   }
 
-  @SetMetadata('roles', ['admin'])
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  // @SetMetadata('roles', ['admin'])
+  // @UseGuards(JwtAuthGuard, RolesGuard)
+  @UsePipes(new JoiValidationPipe(generateEnsalamentValidation))
   @Post('/generate')
   async generate(
     @Body() dto: RequestGenerateEnsalament,
@@ -51,8 +58,9 @@ export class EnsalamentController {
     return this.service.generate(dto.roomsIds, dto.teamsIds);
   }
 
-  @SetMetadata('roles', ['admin'])
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  // @SetMetadata('roles', ['admin'])
+  // @UseGuards(JwtAuthGuard, RolesGuard)
+  @UsePipes(new JoiValidationPipe(createEnsalamentValidation))
   @Post('/')
   async create(@Body() dto: CreateEnsalamentDTO) {
     return this.service.create(dto);
