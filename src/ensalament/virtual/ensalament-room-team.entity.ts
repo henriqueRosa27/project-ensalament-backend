@@ -30,7 +30,7 @@ export class EnsalamentRoomTeamEntity {
   @JoinColumn({ name: 'team_id' })
   team: TeamEntity;
 
-  @Column({ name: 'team_id', select: false })
+  @Column({ name: 'team_id' })
   teamId: string;
 
   @Column({ name: 'created_at' })

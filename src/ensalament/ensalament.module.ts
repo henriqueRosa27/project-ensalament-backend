@@ -11,6 +11,8 @@ import { CourseEntity } from 'src/course/course.entity';
 import { EnsalamentEntity } from './ensalament.entity';
 import { RoomEntity } from 'src/room/room.entity';
 import { TeamEntity } from 'src/team/team.entity';
+import { GetDatasService } from './services/get-datas.service';
+import { CreateEnsalamentService } from './services/create.service';
 
 @Module({
   imports: [
@@ -28,6 +30,6 @@ import { TeamEntity } from 'src/team/team.entity';
     }),
   ],
   controllers: [EnsalamentController],
-  providers: [EnsalamentService],
+  providers: [EnsalamentService, GetDatasService, CreateEnsalamentService],
 })
 export class EnsalamentModule {}

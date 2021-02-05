@@ -29,6 +29,13 @@ import { EnsalamentService } from './ensalament.service';
 export class EnsalamentController {
   constructor(private readonly service: EnsalamentService) {}
 
+  // @SetMetadata('roles', ['admin'])
+  // @UseGuards(JwtAuthGuard, RolesGuard)
+  @Get()
+  async get(): Promise<EnsalamentEntity[]> {
+    return this.service.get();
+  }
+
   @SetMetadata('roles', ['admin'])
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('/buildings/:week?/:shift?')

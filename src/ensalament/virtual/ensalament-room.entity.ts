@@ -20,7 +20,7 @@ export class EnsalamentRoomEntity {
   @ManyToOne(
     () => EnsalamentEntity,
     ensalament => ensalament.ensalamentRooms,
-    {primary: true}
+    { primary: true },
   )
   @JoinColumn({ name: 'ensalament_id' })
   ensalament: EnsalamentEntity;
@@ -32,7 +32,7 @@ export class EnsalamentRoomEntity {
   @JoinColumn({ name: 'room_id' })
   room: RoomEntity;
 
-  @Column({ name: 'room_id', select: false })
+  @Column({ name: 'room_id' })
   roomId: string;
 
   @Column({ name: 'created_at' })

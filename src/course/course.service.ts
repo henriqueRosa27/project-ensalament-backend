@@ -13,7 +13,7 @@ export class CourseService {
   ) {}
 
   async getAll(): Promise<CourseDTO[]> {
-    const courses = await this.rep.find();
+    const courses = await this.rep.find({ order: { createdAt: 'ASC' } });
     return plainToClass(CourseDTO, courses);
   }
 
@@ -57,10 +57,7 @@ export class CourseService {
   }
 
   async update(dto: CourseDTO, id: string): Promise<CourseDTO> {
-    const course = await plainToClass(
-      CourseEntity,
-      await this.findById(id),
-    );
+    const course = await plainToClass(CourseEntity, await this.findById(id));
 
     course.name = dto.name;
 
@@ -70,10 +67,7 @@ export class CourseService {
   }
 
   async delete(id: string): Promise<null> {
-    const course = await plainToClass(
-      CourseEntity,
-      await this.findById(id),
-    );
+    const course = await plainToClass(CourseEntity, await this.findById(id));
 
     course.active = false;
 

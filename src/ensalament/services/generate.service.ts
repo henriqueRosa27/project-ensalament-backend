@@ -1,6 +1,6 @@
 import { RoomEntity } from 'src/room/room.entity';
 import { TeamEntity } from 'src/team/team.entity';
-import { GenerateEnsalament } from './dto/ensalament.dto';
+import { GenerateEnsalament } from '../dto/ensalament.dto';
 
 export class GenerateEnsalamentService {
   constructor(rooms: RoomEntity[], teams: TeamEntity[]) {

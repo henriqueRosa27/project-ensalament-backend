@@ -2,9 +2,8 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  BeforeInsert,
-  BeforeUpdate,
   OneToMany,
+  CreateDateColumn,
 } from 'typeorm';
 import { EnsalamentRoomEntity } from './virtual/ensalament-room.entity';
 
@@ -19,10 +18,19 @@ export class EnsalamentEntity {
   @Column({ name: 'shift' })
   shift: number;
 
-  @Column({ name: 'created_at' })
+  @CreateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+    name: 'created_at',
+  })
   createdAt: Date;
 
-  @Column({ name: 'updated_at' })
+  @CreateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+    onUpdate: 'CURRENT_TIMESTAMP(6)',
+    name: 'updated_at',
+  })
   updateAt: Date;
 
   @Column({ name: 'active' })
@@ -35,13 +43,6 @@ export class EnsalamentEntity {
   )
   ensalamentRooms: EnsalamentRoomEntity[];
 
-  @BeforeInsert()
-  updateCreatedAt(): void {
-    this.createdAt = new Date();
-  }
-
-  @BeforeUpdate()
-  updateUpdatedDate(): void {
-    this.updateAt = new Date();
-  }
+  number: number;
+  teams: number;
 }
