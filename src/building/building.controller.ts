@@ -8,10 +8,10 @@ import {
   UsePipes,
   Param,
   Put,
-  ParseIntPipe,
   Delete,
   Patch,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { BuildingService } from './building.service';
 import { BuildingDTO } from './dto/building.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
@@ -19,6 +19,7 @@ import { RolesGuard } from 'src/auth/roles.guard';
 import { JoiValidationPipe } from 'src/app/shared/pipe/validation.pipe';
 import { buildingValidation } from './dto/building.validation';
 
+@ApiTags('building')
 @Controller('building')
 export class BuildingController {
   constructor(private readonly service: BuildingService) {}
@@ -28,6 +29,20 @@ export class BuildingController {
   @Get()
   async getAll(): Promise<BuildingDTO[]> {
     return this.service.getAll();
+  }
+
+  @SetMetadata('roles', ['admin'])
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Get('/active')
+  async getAllActivies(): Promise<BuildingDTO[]> {
+    return this.service.getAllActive();
+  }
+
+  @SetMetadata('roles', ['admin'])
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Get(':id')
+  async finById(@Param('id') id: string): Promise<BuildingDTO> {
+    return await this.service.findById(id);
   }
 
   @SetMetadata('roles', ['admin'])
@@ -44,7 +59,7 @@ export class BuildingController {
   @Put(':id')
   async update(
     @Body() dto: BuildingDTO,
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id') id: string,
   ): Promise<BuildingDTO> {
     return await this.service.update(dto, id);
   }
@@ -52,14 +67,14 @@ export class BuildingController {
   @SetMetadata('roles', ['admin'])
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Delete(':id')
-  async delete(@Param('id', ParseIntPipe) id: number): Promise<null> {
+  async delete(@Param('id') id: string): Promise<null> {
     return await this.service.delete(id);
   }
 
   @SetMetadata('roles', ['admin'])
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Patch(':id')
-  async reactive(@Param('id', ParseIntPipe) id: number): Promise<BuildingDTO> {
+  async reactive(@Param('id') id: string): Promise<BuildingDTO> {
     return await this.service.reactive(id);
   }
 }

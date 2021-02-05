@@ -8,8 +8,8 @@ import { BeforeUpdate } from 'typeorm';
 
 @Entity('user')
 export class UserEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
 
   @Column({ name: 'name' })
   name: string;
@@ -34,7 +34,7 @@ export class UserEntity {
   updateAt: Date;
 
   @ManyToOne(
-    type => RoleEntity,
+    () => RoleEntity,
     role => role.users,
   )
   @JoinColumn({ name: 'role_id' })

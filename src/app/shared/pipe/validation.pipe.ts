@@ -12,7 +12,7 @@ export class JoiValidationPipe implements PipeTransform {
   constructor(private schema: ObjectSchema) {}
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  async transform(value: any, metadata: ArgumentMetadata) {
+  async transform(value: any, _metadata: ArgumentMetadata) {
     let isValid = true;
     if (typeof value == 'object') {
       const error = await this.schema

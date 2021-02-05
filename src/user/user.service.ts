@@ -47,8 +47,9 @@ export class UserService {
     return plainToClass(UserDTO, user);
   }
 
-  async findById(id: number): Promise<UserDTO> {
+  async findById(id: string): Promise<UserDTO> {
     const user = await this.rep.findOne({ where: { id }, relations: ['role'] });
+
     delete user.password;
 
     return plainToClass(UserDTO, user);

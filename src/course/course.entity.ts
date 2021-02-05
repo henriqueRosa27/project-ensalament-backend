@@ -1,15 +1,17 @@
+import { TeamEntity } from 'src/team/team.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   BeforeInsert,
   BeforeUpdate,
+  OneToMany,
 } from 'typeorm';
 
 @Entity('course')
 export class CourseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
 
   @Column({ name: 'name' })
   name: string;
@@ -22,6 +24,12 @@ export class CourseEntity {
 
   @Column({ name: 'updated_at' })
   updateAt: Date;
+
+  @OneToMany(
+    () => TeamEntity,
+    room => room.course,
+  )
+  teams: TeamEntity[];
 
   @BeforeInsert()
   updateCreatedAt(): void {

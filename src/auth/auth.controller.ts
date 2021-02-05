@@ -1,19 +1,11 @@
-import {
-  Controller,
-  Get,
-  UseGuards,
-  SetMetadata,
-  Post,
-  UsePipes,
-  Body,
-} from '@nestjs/common';
-import { JwtAuthGuard } from './jwt-auth.guard';
-import { RolesGuard } from './roles.guard';
+import { Controller, Post, UsePipes, Body } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { LoginDTO } from './dto/login.dto';
 import { JoiValidationPipe } from 'src/app/shared/pipe/validation.pipe';
 import { loginValidation } from './dto/auth.validation';
 import { AuthService } from './auth.service';
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly service: AuthService) {}

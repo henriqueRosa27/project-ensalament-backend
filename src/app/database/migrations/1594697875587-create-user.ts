@@ -14,10 +14,10 @@ export class createUser1594697875587 implements MigrationInterface {
         columns: [
           {
             name: 'id',
-            type: 'int',
+            type: 'uuid',
             isPrimary: true,
-            isGenerated: true,
-            isNullable: false,
+            generationStrategy: 'uuid',
+            default: 'uuid_generate_v4()',
           },
           {
             name: 'name',
@@ -60,7 +60,7 @@ export class createUser1594697875587 implements MigrationInterface {
           },
           {
             name: 'role_id',
-            type: 'int',
+            type: 'uuid',
             isNullable: false,
           },
         ],

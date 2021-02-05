@@ -1,7 +1,7 @@
 import { UserDTO } from 'src/user/dto/user.dto';
 
 export class RoleDTO {
-  id: number;
+  id: string;
 
   name: string;
 

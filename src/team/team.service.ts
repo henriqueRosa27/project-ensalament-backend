@@ -13,12 +13,18 @@ export class TeamService {
   ) {}
 
   async getAll(): Promise<TeamDTO[]> {
-    const teams = await this.rep.find();
+    const teams = await this.rep.find({
+      relations: ['course'],
+      order: { createdAt: 'ASC' },
+    });
     return plainToClass(TeamDTO, teams);
   }
 
-  async findById(id: number): Promise<TeamDTO> {
-    const team = await this.rep.findOne({ where: { id, active: true } });
+  async findById(id: string): Promise<TeamDTO> {
+    const team = await this.rep.findOne({
+      where: { id, active: true },
+      relations: ['course'],
+    });
 
     if (!team)
       throw new HttpException(
@@ -28,7 +34,7 @@ export class TeamService {
     return plainToClass(TeamDTO, team);
   }
 
-  async findByIdActive(id: number): Promise<TeamDTO> {
+  async findByIdActive(id: string): Promise<TeamDTO> {
     const qb = await getRepository(TeamEntity);
 
     const team = await qb.findOne({ where: { id, active: true } });
@@ -41,17 +47,17 @@ export class TeamService {
 
     team.name = dto.name;
     team.active = true;
+    team.numberStudents = dto.number_students;
+    team.prefLab = dto.prefLab ? dto.prefLab : false;
+    team.courseId = dto.course_id;
 
     const entity = await this.rep.save(team);
 
     return plainToClass(TeamDTO, entity);
   }
 
-  async update(dto: TeamDTO, id: number): Promise<TeamDTO> {
-    const team = await plainToClass(
-      TeamEntity,
-      await this.findById(id),
-    );
+  async update(dto: TeamDTO, id: string): Promise<TeamDTO> {
+    const team = await plainToClass(TeamEntity, await this.findById(id));
 
     team.name = dto.name;
 
@@ -60,11 +66,8 @@ export class TeamService {
     return plainToClass(TeamDTO, entity);
   }
 
-  async delete(id: number): Promise<null> {
-    const team = await plainToClass(
-      TeamEntity,
-      await this.findById(id),
-    );
+  async delete(id: string): Promise<null> {
+    const team = await plainToClass(TeamEntity, await this.findById(id));
 
     team.active = false;
 
@@ -73,7 +76,7 @@ export class TeamService {
     return null;
   }
 
-  async reactive(id: number): Promise<TeamDTO> {
+  async reactive(id: string): Promise<TeamDTO> {
     const team = await this.rep.findOne({ where: { id } });
 
     if (!team)

@@ -5,9 +5,11 @@ import { BuildingEntity } from 'src/building/building.entity';
 import { RoomEntity } from 'src/room/room.entity';
 import { CourseEntity } from 'src/course/course.entity';
 import { TeamEntity } from 'src/team/team.entity';
-import { WorkloadEntity } from 'src/workload/workload.entity';
+import { EnsalamentEntity } from 'src/ensalament/ensalament.entity';
 
 import 'dotenv/config';
+import { EnsalamentRoomEntity } from 'src/ensalament/virtual/ensalament-room.entity';
+import { EnsalamentRoomTeamEntity } from 'src/ensalament/virtual/ensalament-room-team.entity';
 
 const config: ConnectionOptions = {
   type: 'postgres',
@@ -28,7 +30,9 @@ const config: ConnectionOptions = {
     RoomEntity,
     CourseEntity,
     TeamEntity,
-    WorkloadEntity,
+    EnsalamentEntity,
+    EnsalamentRoomEntity,
+    EnsalamentRoomTeamEntity
   ],
   migrationsTableName: 'migrations_typeorm',
   logging: true,

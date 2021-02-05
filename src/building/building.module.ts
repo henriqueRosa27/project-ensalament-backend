@@ -20,6 +20,5 @@ import { jwtConstants } from 'src/auth/constants';
   ],
   controllers: [BuildingController],
   providers: [BuildingService, JwtStrategy],
-  exports: [BuildingService],
 })
 export class BuildingModule {}

@@ -19,7 +19,8 @@
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --config src/app/config/orm.config.ts",
     "migration:create": "npm run typeorm migration:create -- -n",
     "migration:generate": "npm run typeorm migration:generate -- -n",
-    "migration:run": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --config src/app/config/orm.config.ts migration:run -t=false"
+    "migration:run": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --config src/app/config/orm.config.ts migration:run -t=false",
+    "migration:revert": "npm run typeorm migration:revert"
   },
   "dependencies": {
     "@nestjs/common": "^7.0.0",
@@ -27,6 +28,7 @@
     "@nestjs/jwt": "^7.1.0",
     "@nestjs/passport": "^7.1.0",
     "@nestjs/platform-express": "^7.0.0",
+    "@nestjs/swagger": "^4.6.0",
     "@nestjs/typeorm": "^7.1.0",
     "@types/yup": "^0.29.3",
     "argon2": "^0.26.2",
@@ -41,7 +43,9 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.5.4",
-    "typeorm": "^0.2.25",
+    "swagger-ui-express": "^4.1.4",
+    "typeorm": "^0.2.30",
+    "uuidv4": "^6.2.6",
     "yup": "^0.29.1"
   },
   "devDependencies": {

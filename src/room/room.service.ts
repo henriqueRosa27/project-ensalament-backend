@@ -15,12 +15,18 @@ export class RoomService {
   ) {}
 
   async getAll(): Promise<RoomDTO[]> {
-    const rooms = await this.rep.find();
+    const rooms = await this.rep.find({
+      relations: ['building'],
+      order: { createdAt: 'ASC' },
+    });
     return plainToClass(RoomDTO, rooms);
   }
 
-  async findById(id: number): Promise<RoomDTO> {
-    const room = await this.rep.findOne({ where: { id, active: true } });
+  async findById(id: string): Promise<RoomDTO> {
+    const room = await this.rep.findOne({
+      where: { id, active: true },
+      relations: ['building'],
+    });
 
     if (!room)
       throw new HttpException(
@@ -37,7 +43,9 @@ export class RoomService {
     building.id = dto.building_id;
 
     room.name = dto.name;
+    room.capacity = dto.capacity;
     room.active = true;
+    room.isLab = dto.is_lab ? dto.is_lab : false;
     room.building = building;
 
     const entity = await this.rep.save(room);
@@ -45,22 +53,24 @@ export class RoomService {
     return plainToClass(RoomDTO, entity);
   }
 
-  async update(dto: CreateUpdateRoomDTO, id: number): Promise<RoomDTO> {
+  async update(dto: CreateUpdateRoomDTO, id: string): Promise<RoomDTO> {
     const room = plainToClass(RoomEntity, await this.findById(id));
     room.name = dto.name;
 
     const building = new BuildingEntity();
-
     building.id = dto.building_id;
 
+    room.name = dto.name;
+    room.capacity = dto.capacity;
     room.building = building;
+    room.isLab = dto.is_lab ? dto.is_lab : false;
 
     const entity = await this.rep.save(room);
 
     return plainToClass(RoomDTO, entity);
   }
 
-  async delete(id: number): Promise<null> {
+  async delete(id: string): Promise<null> {
     const room = plainToClass(RoomEntity, await this.findById(id));
 
     room.active = false;
@@ -70,7 +80,7 @@ export class RoomService {
     return null;
   }
 
-  async reactive(id: number): Promise<RoomDTO> {
+  async reactive(id: string): Promise<RoomDTO> {
     const room = await this.rep.findOne({ where: { id } });
 
     if (!room)

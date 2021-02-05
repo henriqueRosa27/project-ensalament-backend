@@ -20,6 +20,5 @@ import { JwtStrategy } from 'src/auth/jwt.strategy';
   ],
   controllers: [RoomController],
   providers: [RoomService, JwtStrategy],
-  exports: [RoomService],
 })
 export class RoomModule {}
