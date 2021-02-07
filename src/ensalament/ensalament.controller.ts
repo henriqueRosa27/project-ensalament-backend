@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -29,8 +30,8 @@ import { EnsalamentService } from './ensalament.service';
 export class EnsalamentController {
   constructor(private readonly service: EnsalamentService) {}
 
-  // @SetMetadata('roles', ['admin'])
-  // @UseGuards(JwtAuthGuard, RolesGuard)
+  @SetMetadata('roles', ['admin'])
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get()
   async get(): Promise<EnsalamentEntity[]> {
     return this.service.get();
@@ -72,5 +73,13 @@ export class EnsalamentController {
   @Post('/')
   async create(@Body() dto: CreateEnsalamentDTO): Promise<EnsalamentEntity> {
     return this.service.create(dto);
+  }
+
+  @SetMetadata('roles', ['admin'])
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UsePipes(new JoiValidationPipe(createEnsalamentValidation))
+  @Delete('/:id')
+  async delete(id: string): Promise<void> {
+    this.service.delete(id);
   }
 }
