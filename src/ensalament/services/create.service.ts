@@ -34,7 +34,7 @@ export class CreateEnsalamentService {
         ...newRooms,
       ];
     }
-
+    this.ensalament.createdAt = new Date();
     return this.repEnsalament.save(this.ensalament);
   }
 
@@ -45,6 +45,7 @@ export class CreateEnsalamentService {
 
       if (
         this.ensalament &&
+        this.ensalament.ensalamentRooms &&
         this.ensalament.ensalamentRooms.some(({ id }) => id === room.id)
       ) {
         this.ensalament.ensalamentRooms.filter(({ id }) => id != room.id);

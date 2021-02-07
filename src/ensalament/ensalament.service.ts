@@ -76,4 +76,9 @@ export class EnsalamentService {
     const createService = new CreateEnsalamentService(this.repEnsalament);
     return createService.create(dto);
   }
+
+  async delete(id: string): Promise<void> {
+    const ensalament = await this.repEnsalament.findOne(id);
+    await this.repEnsalament.remove(ensalament);
+  }
 }
