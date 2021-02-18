@@ -48,3 +48,40 @@ class Team {
 
   numberStudents: number;
 }
+
+export class Ensalament {
+  constructor() {
+    this.buildings = new Array<BuildingEnsalament>();
+  }
+  id: string;
+
+  week: number;
+
+  shift: number;
+
+  buildings: BuildingEnsalament[];
+}
+
+class BuildingEnsalament {
+  constructor() {
+    this.rooms = Array<RoomEnsalement>();
+  }
+
+  id: string;
+
+  name: string;
+
+  rooms: RoomEnsalement[];
+}
+
+class RoomEnsalement {
+  id: string;
+
+  name: string;
+
+  capacity: number;
+
+  isLab: boolean;
+
+  team: Team[];
+}

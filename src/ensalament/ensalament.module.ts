@@ -13,6 +13,7 @@ import { RoomEntity } from 'src/room/room.entity';
 import { TeamEntity } from 'src/team/team.entity';
 import { GetDatasService } from './services/get-datas.service';
 import { CreateEnsalamentService } from './services/create.service';
+import { GetByIdEnsalamentService } from './services/get-by-id.service';
 
 @Module({
   imports: [
@@ -30,6 +31,12 @@ import { CreateEnsalamentService } from './services/create.service';
     }),
   ],
   controllers: [EnsalamentController],
-  providers: [EnsalamentService, GetDatasService, CreateEnsalamentService],
+  providers: [
+    EnsalamentService,
+    GetDatasService,
+    CreateEnsalamentService,
+    CreateEnsalamentService,
+    GetByIdEnsalamentService,
+  ],
 })
 export class EnsalamentModule {}
