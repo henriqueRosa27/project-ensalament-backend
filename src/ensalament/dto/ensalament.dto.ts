@@ -1,3 +1,7 @@
+import { CourseEntity } from 'src/course/course.entity';
+import { RoomEntity } from 'src/room/room.entity';
+import { TeamEntity } from 'src/team/team.entity';
+
 export class RequestGenerateEnsalament {
   roomsIds: string[];
 
@@ -47,4 +51,58 @@ class Team {
   prefLab: boolean;
 
   numberStudents: number;
+}
+
+export class Ensalament {
+  constructor() {
+    this.buildings = new Array<BuildingEnsalament>();
+  }
+  id: string;
+
+  week: number;
+
+  shift: number;
+
+  buildings: BuildingEnsalament[];
+}
+
+class BuildingEnsalament {
+  constructor() {
+    this.rooms = Array<RoomEnsalement>();
+  }
+
+  id: string;
+
+  name: string;
+
+  rooms: RoomEnsalement[];
+}
+
+class RoomEnsalement {
+  id: string;
+
+  name: string;
+
+  capacity: number;
+
+  isLab: boolean;
+
+  team: Team[];
+}
+
+export class EnsalamentDetail extends CourseEntity {
+  constructor() {
+    super();
+    this.teams = Array<TeamToDetail>();
+  }
+
+  teams: TeamToDetail[];
+}
+
+export class TeamToDetail extends TeamEntity {
+  room: RoomEntity;
+
+  week: number;
+
+  shift: number;
 }

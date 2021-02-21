@@ -3,10 +3,10 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  BeforeInsert,
-  BeforeUpdate,
   ManyToOne,
   JoinColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('team')
@@ -26,10 +26,19 @@ export class TeamEntity {
   @Column({ name: 'active' })
   active: boolean;
 
-  @Column({ name: 'created_at' })
+  @CreateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+    name: 'created_at',
+  })
   createdAt: Date;
 
-  @Column({ name: 'updated_at' })
+  @UpdateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+    onUpdate: 'CURRENT_TIMESTAMP(6)',
+    name: 'updated_at',
+  })
   updateAt: Date;
 
   @ManyToOne(
@@ -41,14 +50,4 @@ export class TeamEntity {
 
   @Column({ name: 'course_id', select: false })
   courseId: string;
-
-  @BeforeInsert()
-  updateCreatedAt(): void {
-    this.createdAt = new Date();
-  }
-
-  @BeforeUpdate()
-  updateUpdatedDate(): void {
-    this.updateAt = new Date();
-  }
 }

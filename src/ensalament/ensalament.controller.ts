@@ -16,6 +16,8 @@ import { BuildingDTO } from 'src/building/dto/building.dto';
 import { CourseDTO } from 'src/course/dto/course.dto';
 import { CreateEnsalamentDTO } from './dto/create-ensalament.dto';
 import {
+  Ensalament,
+  EnsalamentDetail,
   GenerateEnsalament,
   RequestGenerateEnsalament,
 } from './dto/ensalament.dto';
@@ -79,7 +81,28 @@ export class EnsalamentController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @UsePipes(new JoiValidationPipe(createEnsalamentValidation))
   @Delete('/:id')
-  async delete(id: string): Promise<void> {
+  async delete(@Param('id') id: string): Promise<void> {
     this.service.delete(id);
+  }
+
+  @SetMetadata('roles', ['admin'])
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Delete()
+  async deleteAll(): Promise<void> {
+    this.service.deleteAll();
+  }
+
+  // @SetMetadata('roles', ['admin'])
+  // @UseGuards(JwtAuthGuard, RolesGuard)
+  @Get('/details')
+  async getDetails(): Promise<EnsalamentDetail[]> {
+    return this.service.getDetails();
+  }
+
+  @SetMetadata('roles', ['admin'])
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Get('/:id')
+  async getById(@Param('id') id: string): Promise<Ensalament> {
+    return this.service.getById(id);
   }
 }

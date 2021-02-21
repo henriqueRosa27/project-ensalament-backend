@@ -6,11 +6,17 @@ import { RoomEntity } from 'src/room/room.entity';
 import { TeamEntity } from 'src/team/team.entity';
 import { Repository } from 'typeorm';
 import { CreateEnsalamentDTO } from './dto/create-ensalament.dto';
-import { GenerateEnsalament } from './dto/ensalament.dto';
+import {
+  Ensalament,
+  EnsalamentDetail,
+  GenerateEnsalament,
+} from './dto/ensalament.dto';
 import { EnsalamentEntity } from './ensalament.entity';
 import { CreateEnsalamentService } from './services/create.service';
 import { GenerateEnsalamentService } from './services/generate.service';
+import { GetByIdEnsalamentService } from './services/get-by-id.service';
 import { GetDatasService } from './services/get-datas.service';
+import { GetDetailsEnsalamentService } from './services/get-details.service';
 
 @Injectable()
 export class EnsalamentService {
@@ -22,6 +28,8 @@ export class EnsalamentService {
     @InjectRepository(TeamEntity)
     private readonly repTeam: Repository<TeamEntity>,
     private readonly serviceDatas: GetDatasService,
+    private readonly serviceGetById: GetByIdEnsalamentService,
+    private readonly serviceGetDetails: GetDetailsEnsalamentService,
   ) {}
 
   async get(): Promise<EnsalamentEntity[]> {
@@ -80,5 +88,18 @@ export class EnsalamentService {
   async delete(id: string): Promise<void> {
     const ensalament = await this.repEnsalament.findOne(id);
     await this.repEnsalament.remove(ensalament);
+  }
+
+  async deleteAll(): Promise<void> {
+    const ensalaments = await this.repEnsalament.find();
+    await this.repEnsalament.remove(ensalaments);
+  }
+
+  async getById(id: string): Promise<Ensalament> {
+    return this.serviceGetById.getById(id);
+  }
+
+  async getDetails(): Promise<EnsalamentDetail[]> {
+    return this.serviceGetDetails.getDetails();
   }
 }
