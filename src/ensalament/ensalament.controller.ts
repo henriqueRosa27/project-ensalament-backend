@@ -17,6 +17,7 @@ import { CourseDTO } from 'src/course/dto/course.dto';
 import { CreateEnsalamentDTO } from './dto/create-ensalament.dto';
 import {
   Ensalament,
+  EnsalamentDetail,
   GenerateEnsalament,
   RequestGenerateEnsalament,
 } from './dto/ensalament.dto';
@@ -86,7 +87,6 @@ export class EnsalamentController {
 
   @SetMetadata('roles', ['admin'])
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @UsePipes(new JoiValidationPipe(createEnsalamentValidation))
   @Delete()
   async deleteAll(): Promise<void> {
     this.service.deleteAll();
@@ -94,7 +94,13 @@ export class EnsalamentController {
 
   // @SetMetadata('roles', ['admin'])
   // @UseGuards(JwtAuthGuard, RolesGuard)
-  @UsePipes(new JoiValidationPipe(createEnsalamentValidation))
+  @Get('/details')
+  async getDetails(): Promise<EnsalamentDetail[]> {
+    return this.service.getDetails();
+  }
+
+  @SetMetadata('roles', ['admin'])
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('/:id')
   async getById(@Param('id') id: string): Promise<Ensalament> {
     return this.service.getById(id);

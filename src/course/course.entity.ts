@@ -3,14 +3,14 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  BeforeInsert,
-  BeforeUpdate,
   OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('course')
 export class CourseEntity {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ name: 'name' })
@@ -19,10 +19,19 @@ export class CourseEntity {
   @Column({ name: 'active' })
   active: boolean;
 
-  @Column({ name: 'created_at' })
+  @CreateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+    name: 'created_at',
+  })
   createdAt: Date;
 
-  @Column({ name: 'updated_at' })
+  @UpdateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+    onUpdate: 'CURRENT_TIMESTAMP(6)',
+    name: 'updated_at',
+  })
   updateAt: Date;
 
   @OneToMany(
@@ -30,14 +39,4 @@ export class CourseEntity {
     room => room.course,
   )
   teams: TeamEntity[];
-
-  @BeforeInsert()
-  updateCreatedAt(): void {
-    this.createdAt = new Date();
-  }
-
-  @BeforeUpdate()
-  updateUpdatedDate(): void {
-    this.updateAt = new Date();
-  }
 }

@@ -1,3 +1,7 @@
+import { CourseEntity } from 'src/course/course.entity';
+import { RoomEntity } from 'src/room/room.entity';
+import { TeamEntity } from 'src/team/team.entity';
+
 export class RequestGenerateEnsalament {
   roomsIds: string[];
 
@@ -84,4 +88,21 @@ class RoomEnsalement {
   isLab: boolean;
 
   team: Team[];
+}
+
+export class EnsalamentDetail extends CourseEntity {
+  constructor() {
+    super();
+    this.teams = Array<TeamToDetail>();
+  }
+
+  teams: TeamToDetail[];
+}
+
+export class TeamToDetail extends TeamEntity {
+  room: RoomEntity;
+
+  week: number;
+
+  shift: number;
 }
