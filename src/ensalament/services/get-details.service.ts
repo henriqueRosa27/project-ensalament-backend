@@ -73,7 +73,9 @@ export class GetDetailsEnsalamentService {
             },
           )[0];
 
-          this.setEnsalamentData(team, room);
+          if (team) {
+            this.setEnsalamentData(team, room);
+          }
         });
       });
     });
@@ -81,6 +83,7 @@ export class GetDetailsEnsalamentService {
 
   setEnsalamentData(course: CourseToSave, room: RoomEntity): void {
     if (this.ensalaments.length === 0) {
+      console.log('teste1');
       const newData = {
         ...course,
         teams: [{ ...course.team, room, week: 0, shift: 0 }],
@@ -89,6 +92,7 @@ export class GetDetailsEnsalamentService {
       delete newData.team;
       this.ensalaments.push(newData);
     } else if (this.ensalaments.filter(d => d.id === course.id)) {
+      console.log('teste2');
       this.ensalaments = this.ensalaments.map(e => {
         if (e.id === course.id) {
           return {
@@ -99,6 +103,7 @@ export class GetDetailsEnsalamentService {
         return e;
       }) as any;
     } else {
+      console.log('teste3');
       const newData = {
         ...course,
         teams: [{ ...course.team, room }],
