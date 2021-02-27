@@ -50,6 +50,7 @@ export class CourseService {
 
     course.name = dto.name;
     course.active = true;
+    course.createdAt = new Date();
 
     const entity = await this.rep.save(course);
 
