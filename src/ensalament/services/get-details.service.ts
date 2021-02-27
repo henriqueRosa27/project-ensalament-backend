@@ -3,7 +3,11 @@ import { CourseEntity } from 'src/course/course.entity';
 import { RoomEntity } from 'src/room/room.entity';
 import { TeamEntity } from 'src/team/team.entity';
 import { In, Repository } from 'typeorm';
-import { EnsalamentDetail } from '../dto/ensalament.dto';
+import {
+  EnsalamentDetail,
+  RoomToDetail,
+  TeamToDetail,
+} from '../dto/ensalament.dto';
 import { EnsalamentEntity } from '../ensalament.entity';
 
 export class GetDetailsEnsalamentService {
@@ -60,53 +64,126 @@ export class GetDetailsEnsalamentService {
         const room = this.rooms.find(r => r.id === ensalamentRoom.roomId);
 
         ensalamentRoom.ensalamentRoomTeams.forEach(ensalamentRoomTeam => {
-          const team: CourseToSave = this.courses.map(
-            ({ teams, ...course }) => {
-              if (teams.some(t => t.id === ensalamentRoomTeam.teamId)) {
-                return {
-                  ...course,
-                  team: teams.find(
-                    team => team.id === ensalamentRoomTeam.teamId,
-                  ),
-                };
-              }
-            },
-          )[0];
+          const course = this.courses.find(({ teams }) =>
+            teams.some(t => t.id === ensalamentRoomTeam.teamId),
+          );
 
-          this.setEnsalamentData(team, room);
+          const team: CourseToSave = {
+            ...course,
+            team: course.teams.find(
+              team => team.id === ensalamentRoomTeam.teamId,
+            ),
+          };
+
+          if (team) {
+            this.setEnsalamentData({
+              course: team,
+              room,
+              week: ensalamentData.week,
+              shift: ensalamentData.shift,
+              ensalamentId: ensalamentData.id,
+            });
+          }
         });
       });
     });
   }
 
-  setEnsalamentData(course: CourseToSave, room: RoomEntity): void {
+  setEnsalamentData({
+    course,
+    room,
+    week,
+    shift,
+    ensalamentId,
+  }: SetEnsalamentProp): void {
     if (this.ensalaments.length === 0) {
-      const newData = {
-        ...course,
-        teams: [{ ...course.team, room, week: 0, shift: 0 }],
-      };
-
-      delete newData.team;
-      this.ensalaments.push(newData);
-    } else if (this.ensalaments.filter(d => d.id === course.id)) {
+      const data = this.convertToEnsalament({
+        course,
+        room,
+        week,
+        shift,
+        ensalamentId,
+      });
+      this.ensalaments.push(data);
+    } else if (this.ensalaments.some(d => d.id === course.id)) {
       this.ensalaments = this.ensalaments.map(e => {
         if (e.id === course.id) {
+          const data = this.convertToEnsalament({
+            course,
+            room,
+            week,
+            shift,
+            ensalamentId,
+          });
+
           return {
             ...e,
-            teams: [...e.teams, { ...course.team, room }],
+            teams: data.teams,
           };
         }
         return e;
-      }) as any;
+      });
     } else {
-      const newData = {
-        ...course,
-        teams: [{ ...course.team, room }],
-      } as any;
-
-      delete newData.team;
-      this.ensalaments.push(newData);
+      const data = this.convertToEnsalament({
+        course,
+        room,
+        week,
+        shift,
+        ensalamentId,
+      });
+      this.ensalaments.push(data);
     }
+  }
+
+  convertToEnsalament({
+    course,
+    room,
+    week,
+    shift,
+    ensalamentId,
+  }: ConvertToEnsalamentProp): EnsalamentDetail {
+    const team = this.ensalaments
+      .map(({ teams }) => teams)
+      ?.flat()
+      .find(team => team.id === course.team.id);
+
+    if (team) {
+      team.rooms.push({ room, week, shift });
+      const ensalament = this.ensalaments.find(ensalament =>
+        ensalament.teams.some(t => t.id === team.id),
+      );
+
+      return {
+        ...ensalament,
+        teams: ensalament.teams.map(t => {
+          if (t.id === team.id) return team;
+          return t;
+        }),
+      };
+    }
+
+    const oldRooms =
+      this.ensalaments
+        .find(e => e.id === course.id)
+        ?.teams?.find(t => t.id == course.team.id)?.rooms || [];
+
+    const oldTeams =
+      this.ensalaments.find(e => e.id === course.id)?.teams || [];
+
+    const rooms: RoomToDetail[] = [...oldRooms, { room, week, shift }];
+    const teams: TeamToDetail[] = [
+      ...oldTeams,
+      { ...course.team, rooms, ensalamentId },
+    ];
+
+    const ensalamentoDetail = {
+      ...course,
+      teams,
+    };
+
+    delete ensalamentoDetail.team;
+
+    return ensalamentoDetail;
   }
 
   getsqlRoom(): string {
@@ -121,6 +198,10 @@ export class GetDetailsEnsalamentService {
                 inner join ensalament_room er on er.ensalament_id = e.id
                 inner join ensalament_room_team ert on ert.ensalament_room_id  = er.id `;
   }
+
+  validateToSetTeam(ensalament: EnsalamentDetail): boolean {
+    return ensalament && !ensalament.teams && ensalament.teams.length > 0;
+  }
 }
 
 class CourseToSave {
@@ -131,3 +212,19 @@ class CourseToSave {
   createdAt: Date;
   updateAt: Date;
 }
+
+type SetEnsalamentProp = {
+  course: CourseToSave;
+  room: RoomEntity;
+  week: number;
+  shift: number;
+  ensalamentId: string;
+};
+
+type ConvertToEnsalamentProp = {
+  course: CourseToSave;
+  room: RoomEntity;
+  week: number;
+  shift: number;
+  ensalamentId: string;
+};

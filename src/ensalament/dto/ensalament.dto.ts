@@ -100,9 +100,18 @@ export class EnsalamentDetail extends CourseEntity {
 }
 
 export class TeamToDetail extends TeamEntity {
-  room: RoomEntity;
+  constructor() {
+    super();
+    this.rooms = Array<RoomToDetail>();
+  }
+  ensalamentId: string;
+  rooms: RoomToDetail[];
+}
 
+export class RoomToDetail {
   week: number;
 
   shift: number;
+
+  room: RoomEntity;
 }

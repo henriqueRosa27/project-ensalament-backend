@@ -50,6 +50,7 @@ export class TeamService {
     team.numberStudents = dto.number_students;
     team.prefLab = dto.prefLab ? dto.prefLab : false;
     team.courseId = dto.course_id;
+    team.createdAt = new Date();
 
     const entity = await this.rep.save(team);
 
@@ -60,6 +61,8 @@ export class TeamService {
     const team = await plainToClass(TeamEntity, await this.findById(id));
 
     team.name = dto.name;
+    team.courseId = dto.course_id;
+    team.numberStudents = dto.number_students;
 
     const entity = await this.rep.save(team);
 

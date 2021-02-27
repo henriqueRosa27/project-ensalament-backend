@@ -92,8 +92,8 @@ export class EnsalamentController {
     this.service.deleteAll();
   }
 
-  // @SetMetadata('roles', ['admin'])
-  // @UseGuards(JwtAuthGuard, RolesGuard)
+  //@SetMetadata('roles', ['admin'])
+  //@UseGuards(JwtAuthGuard, RolesGuard)
   @Get('/details')
   async getDetails(): Promise<EnsalamentDetail[]> {
     return this.service.getDetails();

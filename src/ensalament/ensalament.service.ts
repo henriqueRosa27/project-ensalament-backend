@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BuildingDTO } from 'src/building/dto/building.dto';
+import { CourseEntity } from 'src/course/course.entity';
 import { CourseDTO } from 'src/course/dto/course.dto';
 import { RoomEntity } from 'src/room/room.entity';
 import { TeamEntity } from 'src/team/team.entity';
-import { Repository } from 'typeorm';
+import { getRepository, Repository } from 'typeorm';
 import { CreateEnsalamentDTO } from './dto/create-ensalament.dto';
 import {
   Ensalament,
@@ -29,7 +30,6 @@ export class EnsalamentService {
     private readonly repTeam: Repository<TeamEntity>,
     private readonly serviceDatas: GetDatasService,
     private readonly serviceGetById: GetByIdEnsalamentService,
-    private readonly serviceGetDetails: GetDetailsEnsalamentService,
   ) {}
 
   async get(): Promise<EnsalamentEntity[]> {
@@ -100,6 +100,11 @@ export class EnsalamentService {
   }
 
   async getDetails(): Promise<EnsalamentDetail[]> {
-    return this.serviceGetDetails.getDetails();
+    const serviceGetDetails = new GetDetailsEnsalamentService(
+      this.repEnsalament,
+      this.repRoom,
+      getRepository(CourseEntity),
+    );
+    return serviceGetDetails.getDetails();
   }
 }
